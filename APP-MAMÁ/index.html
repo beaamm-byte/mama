@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#fbf6ee">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Un ratito de luz">
+  <link rel="icon" type="image/svg+xml" href="icono-luz.svg">
+  <link rel="apple-touch-icon" href="icono-luz.svg">
+  <link rel="manifest" href="manifest.webmanifest">
+  <title>Un ratito de luz</title>
+  <style>
+    :root {
+      --cream:#fbf6ee; --paper:#fffdfa; --ink:#3f4541; --muted:#737a75;
+      --sage:#789281; --sage-light:#dfe9e1; --rose:#cb8f87; --rose-light:#f5dfda;
+      --gold:#c9a85d; --shadow:0 12px 35px rgba(68,74,69,.10);
+    }
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:var(--cream);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh}
+    button,input,textarea{font:inherit}
+    button{cursor:pointer}
+    .app{max-width:560px;margin:auto;min-height:100vh;padding:env(safe-area-inset-top) 18px calc(96px + env(safe-area-inset-bottom))}
+    header{padding:30px 5px 16px;display:flex;justify-content:space-between;align-items:center}
+    .eyebrow{font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;color:var(--sage);font-weight:750}
+    h1{font-family:Georgia,serif;font-size:2.15rem;line-height:1.04;margin:.35rem 0 .2rem;font-weight:500;color:#39453d}
+    .date{color:var(--muted);font-size:.9rem}
+    .sun{font-size:2rem;width:54px;height:54px;border-radius:50%;display:grid;place-items:center;background:#fff7d8;box-shadow:var(--shadow)}
+    .view{display:none;animation:fade .35s ease}.view.active{display:block}@keyframes fade{from{opacity:0;transform:translateY(6px)}}
+    .card{background:var(--paper);border:1px solid rgba(120,146,129,.14);border-radius:26px;padding:24px;margin:12px 0;box-shadow:var(--shadow)}
+    .daily{background:linear-gradient(145deg,#fffdfa,#f7eee4);position:relative;overflow:hidden}
+    .daily:after{content:"✦";position:absolute;right:18px;top:12px;font-size:4rem;color:rgba(201,168,93,.15)}
+    .label{color:var(--sage);font-size:.78rem;text-transform:uppercase;letter-spacing:.11em;font-weight:800}
+    .quote{font-family:Georgia,serif;font-size:1.55rem;line-height:1.42;margin:18px 0 12px;position:relative;z-index:1}
+    .verse{border-left:3px solid var(--gold);padding-left:14px;color:#626961;font-size:.95rem;line-height:1.5}
+    .actions{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+    .action{border:0;border-radius:21px;padding:20px 12px;min-height:128px;text-align:left;color:var(--ink);box-shadow:var(--shadow);background:white}
+    .action span{display:block;font-size:1.8rem;margin-bottom:13px}.action strong{display:block;font-size:1rem}.action small{color:var(--muted);line-height:1.35;display:block;margin-top:5px}
+    .action:nth-child(1){background:var(--sage-light)}.action:nth-child(2){background:var(--rose-light)}
+    .family{display:flex;gap:14px;align-items:flex-start}.heart{flex:0 0 42px;height:42px;border-radius:50%;display:grid;place-items:center;background:var(--rose-light)}
+    .family p{margin:5px 0 0;line-height:1.55;font-family:Georgia,serif;font-size:1.07rem}
+    h2{font:500 1.8rem Georgia,serif;margin:10px 3px 5px}.intro{color:var(--muted);line-height:1.5;margin:0 3px 20px}
+    .breath-wrap{text-align:center;padding:28px 15px 30px}.mantra{min-height:58px;margin:4px auto 18px;max-width:340px;font:1.18rem/1.5 Georgia,serif;color:#536e5c;display:flex;align-items:center;justify-content:center;transition:opacity .25s}
+    .orb{width:180px;height:180px;margin:18px auto 28px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 35% 30%,#f7ece0,#b7cbbd);box-shadow:0 10px 45px rgba(120,146,129,.27);transition:transform 4s ease-in-out}
+    .orb.inhale{transform:scale(1.22)}.orb.exhale{transform:scale(.82)}
+    .orb-content{display:flex;flex-direction:column;align-items:center;gap:7px}.orb span{font-family:Georgia,serif;font-size:1.2rem;color:#46594d}.countdown{font:600 1.65rem/1 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#536e5c;letter-spacing:.03em;font-variant-numeric:tabular-nums}
+    .primary{border:0;border-radius:99px;background:var(--sage);color:white;font-weight:700;padding:14px 24px;min-width:180px;box-shadow:0 8px 20px rgba(120,146,129,.25)}
+    .secondary{border:1px solid #d8ded9;background:white;border-radius:99px;padding:12px 18px;color:var(--ink)}
+    .garden-form{padding:20px}.garden-form label{display:block;margin-bottom:10px}.garden-form select,.garden-form input{width:100%;border:1px solid #dce2dc;background:white;border-radius:15px;padding:13px 14px;color:var(--ink);outline:none;margin-bottom:10px}.garden-form input:focus,.garden-form select:focus{border-color:var(--sage)}
+    .garden{min-height:310px;position:relative;overflow:hidden;background:linear-gradient(#e9f2ed 0 62%,#d9cbb2 62%);border-radius:26px;box-shadow:var(--shadow);touch-action:manipulation}
+    .garden:before{content:'Tu jardín irá guardando cada pensamiento';position:absolute;width:100%;top:20px;text-align:center;color:#718077;font-size:.82rem}.flower{position:absolute;transform:translate(-50%,-50%) scale(0);animation:bloom .55s cubic-bezier(.2,1.5,.5,1) forwards;filter:drop-shadow(0 5px 3px rgba(0,0,0,.08));user-select:none;text-align:center}.flower-icon{display:block;font-size:2.4rem}.flower-name{display:block;max-width:90px;padding:3px 7px;border-radius:10px;background:rgba(255,253,250,.9);font-size:.67rem;font-weight:700;color:#536158;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-shadow:0 2px 8px rgba(0,0,0,.08)}@keyframes bloom{to{transform:translate(-50%,-50%) scale(1)}}
+    .garden-count{text-align:center;margin:15px;color:var(--muted)}
+    textarea{width:100%;min-height:110px;border:1px solid #dce2dc;background:#fff;border-radius:18px;padding:16px;resize:none;color:var(--ink);outline:none}textarea:focus{border-color:var(--sage)}
+    .row{display:flex;gap:10px;align-items:center;margin-top:12px}.row .primary{min-width:0;flex:1}.saved{font-size:.9rem;color:var(--sage);opacity:0;transition:.2s}.saved.show{opacity:1}
+    .gratitudes{margin-top:18px;display:grid;gap:9px}.note{background:#fff9e8;padding:13px 15px;border-radius:15px;display:flex;gap:10px;line-height:1.4}.note button{margin-left:auto;border:0;background:none;color:#999}
+    .prayer{text-align:center;padding:30px 25px}.cross{font-size:2rem;color:var(--gold)}.prayer-text{font:1.25rem/1.65 Georgia,serif;margin:18px 0;color:#4b544e}.mission{background:var(--sage-light);border-radius:18px;padding:16px;margin:18px 0;text-align:left}.mission strong{display:block;color:#536e5c;margin-bottom:6px}.mission p{margin:0;line-height:1.5}.mission-done{background:#fff7d8!important;color:#665627!important}
+    .devotion-picker{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0}.devotion-picker button{border:1px solid #d8e0da;background:white;border-radius:17px;padding:13px 8px;color:var(--ink)}.devotion-picker button.active{background:var(--sage);border-color:var(--sage);color:white;font-weight:700}.devotion{display:none}.devotion.active{display:block}.source-frame{display:block;width:100%;height:58vh;min-height:480px;border:1px solid #dce2dc;border-radius:18px;background:white;margin:18px 0}.source-button{display:block;text-align:center;text-decoration:none;width:100%}
+    nav{position:fixed;z-index:10;bottom:0;left:50%;transform:translateX(-50%);width:min(560px,100%);display:grid;grid-template-columns:repeat(5,1fr);padding:9px 8px calc(9px + env(safe-area-inset-bottom));background:rgba(255,253,250,.92);backdrop-filter:blur(18px);border-top:1px solid rgba(120,146,129,.15)}
+    nav button{border:0;background:none;color:#828883;padding:7px 2px;font-size:.69rem}nav button span{display:block;font-size:1.3rem;margin-bottom:3px}nav button.active{color:#536e5c;font-weight:750}
+    .toast{position:fixed;left:50%;bottom:100px;transform:translateX(-50%) translateY(15px);background:#3e4942;color:white;padding:11px 17px;border-radius:99px;opacity:0;pointer-events:none;transition:.25s;z-index:20;font-size:.88rem}.toast.show{opacity:1;transform:translateX(-50%)}
+    @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header>
+      <div><div class="eyebrow">Un ratito de luz</div><h1 id="greeting">Buenos días, mamá</h1><div class="date" id="date"></div></div>
+      <div class="sun" aria-hidden="true">☀️</div>
+    </header>
+
+    <section class="view active" id="home">
+      <article class="card daily">
+        <div class="label">Tu luz de hoy</div>
+        <p class="quote" id="dailyQuote"></p>
+        <div class="verse" id="dailyVerse"></div>
+      </article>
+      <div class="actions">
+        <button class="action" data-go="calma"><span>🌿</span><strong>Un minuto de calma</strong><small>Respira despacio conmigo</small></button>
+        <button class="action" data-go="jardin"><span>🌸</span><strong>Haz florecer algo</strong><small>Un jardín para jugar</small></button>
+      </div>
+      <article class="card family">
+        <div class="heart">💗</div><div><div class="label">De mí para ti</div><p id="familyMessage"></p></div>
+      </article>
+      <button class="secondary" id="newMessage" style="width:100%;margin-top:4px">Otro abrazo en palabras</button>
+    </section>
+
+    <section class="view" id="calma">
+      <h2>Respiremos juntas</h2><p class="intro">Solo este instante importa. No hay nada que hacer bien.</p>
+      <article class="card breath-wrap">
+        <div class="orb" id="orb"><div class="orb-content"><span id="breathText">Preparada</span><strong class="countdown" id="countdown">1:00</strong></div></div>
+        <div class="mantra" id="mantra">Este minuto es solo para ti.</div>
+        <button class="primary" id="breathBtn">Empezar 1 minuto</button>
+      </article>
+      <article class="card prayer"><div class="cross">✦</div><div class="label">Oración breve de hoy</div><p class="prayer-text" id="dailyPrayer"></p></article>
+    </section>
+
+    <section class="view" id="jardin">
+      <h2>El jardín de quienes me dan luz</h2><p class="intro">Planta una flor por una persona, un recuerdo o algo concreto que quieras cuidar hoy.</p>
+      <article class="card garden-form">
+        <label class="label" for="gardenKind">Esta flor será por…</label>
+        <select id="gardenKind">
+          <option value="una persona que quiero">Una persona que quiero</option>
+          <option value="un recuerdo bonito">Un recuerdo bonito</option>
+          <option value="algo que agradezco">Algo que agradezco</option>
+          <option value="un deseo o una esperanza">Un deseo o una esperanza</option>
+        </select>
+        <input id="gardenThought" maxlength="45" placeholder="Escribe un nombre o unas palabras">
+        <button class="primary" id="plantFlower" style="width:100%">Plantar esta flor</button>
+      </article>
+      <div class="garden" id="garden" role="button" aria-label="Toca para plantar flores"></div>
+      <div class="garden-count" id="gardenCount">Tu jardín está esperando la primera flor</div>
+      <button class="secondary" id="clearGarden" style="width:100%">Empezar un jardín nuevo</button>
+    </section>
+
+    <section class="view" id="gratitud">
+      <h2>Pequeñas cosas bonitas</h2><p class="intro">Una palabra también cuenta: una llamada, el sol, una canción, estar juntos…</p>
+      <article class="card">
+        <label class="label" for="gratitude">Hoy doy gracias por…</label>
+        <textarea id="gratitude" maxlength="180" placeholder="Escribe aquí algo pequeñito"></textarea>
+        <div class="row"><button class="primary" id="saveGratitude">Guardar en mi corazón</button><span class="saved" id="saved">Guardado ✓</span></div>
+        <div class="gratitudes" id="gratitudes"></div>
+      </article>
+      <article class="card prayer">
+        <div class="cross">🕊️</div><div class="label">Una pregunta para el corazón</div>
+        <p class="prayer-text" id="faithPrompt"></p>
+        <div class="mission"><strong>Tu pequeño gesto de hoy</strong><p id="faithMission"></p></div>
+        <button class="primary" id="missionDone">Lo he hecho hoy</button>
+      </article>
+    </section>
+
+    <section class="view" id="oraciones">
+      <h2>Un momento de oración</h2><p class="intro">Elige una devoción y reza sin prisa. Este rincón también guarda tu camino.</p>
+      <div class="devotion-picker">
+        <button class="active" data-devotion="maravillas">Santa Maravillas</button>
+        <button data-devotion="leopoldo">Fray Leopoldo</button>
+      </div>
+
+      <div class="devotion active" id="maravillas">
+        <article class="card">
+          <div class="label">Novena a Santa Maravillas de Jesús</div>
+          <h2 style="margin:12px 0">Folleto original de la novena</h2>
+          <iframe class="source-frame" src="novena-santa-maravillas.pdf#view=FitH" title="Novena de Santa Maravillas de Jesús"></iframe>
+          <a class="primary source-button" href="novena-santa-maravillas.pdf" target="_blank">Abrir el librito completo</a>
+        </article>
+      </div>
+
+      <div class="devotion" id="leopoldo">
+        <article class="card">
+          <div class="label">Oraciones con Fray Leopoldo</div>
+          <h2 style="margin:12px 0">Triduo y novena original</h2>
+          <iframe class="source-frame" src="fray-leopoldo-original.pdf#view=FitH" title="Triduo y novena de Fray Leopoldo"></iframe>
+          <a class="primary source-button" href="fray-leopoldo-original.pdf" target="_blank">Abrir el librito completo</a>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <nav aria-label="Navegación principal">
+    <button class="active" data-view="home"><span>☀️</span>Hoy</button>
+    <button data-view="calma"><span>🌿</span>Calma</button>
+    <button data-view="jardin"><span>🌸</span>Jardín</button>
+    <button data-view="gratitud"><span>💛</span>Gracias</button>
+    <button data-view="oraciones"><span>🙏</span>Orar</button>
+  </nav>
+  <div class="toast" id="toast">Una flor para ti 🌸</div>
+
+  <script>
+    const quotes = [
+      ['Hoy no tienes que poder con todo. Solo tienes que vivir este momento, y dejarte querer.','«El Señor es mi pastor, nada me falta». — Salmo 23'],
+      ['Tu fuerza no siempre hace ruido. A veces es simplemente respirar, sonreír y continuar.','«Todo lo puedo en Aquel que me fortalece». — Filipenses 4,13'],
+      ['Eres maestra de tantas vidas. Hoy permite que el cariño de los demás también cuide de ti.','«El amor todo lo espera, todo lo soporta». — 1 Corintios 13,7'],
+      ['Hay días para avanzar y días para descansar. Los dos son parte del camino.','«Venid a mí los que estáis cansados y agobiados». — Mateo 11,28'],
+      ['Incluso en la incertidumbre, sigues rodeada de amor. No caminas sola.','«Yo estoy con vosotros todos los días». — Mateo 28,20'],
+      ['Tu vida sigue llena de momentos que merecen ser abrazados, uno a uno.','«Este es el día que hizo el Señor; alegrémonos». — Salmo 118'],
+      ['La esperanza también vive en las cosas pequeñas: una voz querida, una luz, una mano cerca.','«La esperanza no defrauda». — Romanos 5,5'],
+      ['Permítete ir despacio. También los pasos pequeños forman parte de los caminos importantes.','«Lámpara es tu palabra para mis pasos». — Salmo 119,105'],
+      ['Hoy puedes descansar en el cariño de quienes te rodean. No tienes que sostenerlo todo tú.','«Ayudaos mutuamente a llevar vuestras cargas». — Gálatas 6,2'],
+      ['Tu corazón puede sentir muchas cosas a la vez. Todas merecen espacio, paciencia y ternura.','«El Señor está cerca de los corazones heridos». — Salmo 34,19'],
+      ['Hay una fuerza serena en dejarse acompañar. Recibir amor también es una forma de amar.','«Donde dos o tres están reunidos en mi nombre, allí estoy yo». — Mateo 18,20'],
+      ['No necesitas conocer todas las respuestas. Para hoy basta con el siguiente paso.','«Caminamos en la fe y no en la visión». — 2 Corintios 5,7'],
+      ['Tu cansancio no disminuye tu valor. Sigues siendo profundamente querida tal como estás.','«Yo os aliviaré». — Mateo 11,28'],
+      ['Que la paz llegue hoy sin hacer ruido, como una mano querida que encuentra la tuya.','«Mi paz os doy». — Juan 14,27'],
+      ['Cada amanecer abre un espacio nuevo. No exige olvidar ayer, solo recibir un poco de luz.','«Cada mañana se renueva tu misericordia». — Lamentaciones 3,23'],
+      ['Puedes confiar tus preocupaciones a Dios y compartirlas con nosotros. Las llevamos en familia.','«Descargad en Él todo vuestro agobio, porque Él cuida de vosotros». — 1 Pedro 5,7'],
+      ['Incluso el silencio puede ser oración cuando nace de un corazón sincero.','«Vuestro Padre sabe lo que necesitáis». — Mateo 6,8'],
+      ['Hoy busca una sola cosa bonita. Puede ser pequeña; la gratitud sabe hacerla crecer.','«Dad gracias en toda ocasión». — 1 Tesalonicenses 5,18'],
+      ['Tu fe no necesita ser perfecta para sostenerte. Puede descansar, preguntar y seguir confiando.','«Creo, pero ayuda mi falta de fe». — Marcos 9,24'],
+      ['El amor de tu familia permanece cerca: en las palabras, en los gestos y también en el silencio.','«El amor no pasa nunca». — 1 Corintios 13,8'],
+      ['Hay días para hablar y otros para recogerse. Escucha lo que tu corazón necesita hoy.','«Todo tiene su momento». — Eclesiastés 3,1'],
+      ['Ninguna lágrima te hace menos fuerte. A veces también limpia el espacio por donde entra la calma.','«Dios enjugará toda lágrima». — Apocalipsis 21,4'],
+      ['Tu nombre está escrito en la historia de muchas personas que reciben tu cariño y tus enseñanzas.','«Vosotros sois la luz del mundo». — Mateo 5,14'],
+      ['Que hoy te trates con la misma dulzura con la que siempre recibes a quienes necesitan ayuda.','«Sed bondadosos y compasivos». — Efesios 4,32'],
+      ['No estás definida por lo que ocurre, sino por todo el amor, la fe y la vida que habitan en ti.','«Nada podrá separarnos del amor de Dios». — Romanos 8,39'],
+      ['Hoy puede ser suficiente respirar, mirar alrededor y sentir que estamos contigo.','«En Él vivimos, nos movemos y existimos». — Hechos 17,28'],
+      ['Dios también se encuentra en lo cotidiano: una conversación, una comida, una risa compartida.','«Gustad y ved qué bueno es el Señor». — Salmo 34,9'],
+      ['Cuando llegue la inquietud, no luches sola contra ella. Llámanos y hacemos sitio juntos a la calma.','«No temas, porque yo estoy contigo». — Isaías 41,10'],
+      ['Tu presencia ya es un regalo. No necesitas hacer nada extraordinario para llenar de amor este día.','«Tú eres preciosa a mis ojos». — Isaías 43,4'],
+      ['La paciencia contigo misma también es esperanza: una manera suave de confiar en mañana.','«La tribulación produce paciencia; la paciencia, esperanza». — Romanos 5,3-4'],
+      ['Hoy celebra cada pequeña victoria: levantarte, descansar, reír o pedir lo que necesitas.','«Alegraos con los que están alegres». — Romanos 12,15'],
+      ['Puedes dejar en manos de Dios lo que hoy no puedes resolver. Él conoce cada rincón de tu corazón.','«Encomienda al Señor tu camino y confía en Él». — Salmo 37,5'],
+      ['Somos tu equipo. Tú marcas el ritmo y nosotros permanecemos cerca en cada jugada.','«Más valen dos que uno, porque si uno cae, el otro lo levanta». — Eclesiastés 4,9-10'],
+      ['Que este día no tenga prisa. El amor sabe quedarse y acompañar el tiempo que haga falta.','«Permaneced en mi amor». — Juan 15,9'],
+      ['La luz no desaparece porque aparezcan nubes. A veces solo espera detrás, paciente y cercana.','«La luz brilla en las tinieblas». — Juan 1,5']
+    ];
+    const messages = [
+      'Mamá, aquí estoy. En los días fáciles y en los difíciles. Eres parte de mí y yo camino contigo, paso a paso.',
+      'Todo el amor que siembras vuelve hacia ti. Déjate cuidar y querer muchísimo.',
+      'No hace falta que hoy seas fuerte para todos. Con ser tú es suficiente. Yo te quiero así, enterita.',
+      'Si alguna vez aparece el miedo, compártelo con nosotros: papá, la hermana y yo estamos contigo, y lo llevamos entre todos.',
+      'Tu fe, tu ternura y tu manera de enseñar llenan de luz a muchísima gente. También a mí.',
+      'Hoy quiero regalarte calma. No tienes que llegar a ningún sitio: estoy a tu lado en el camino.',
+      'Mamá, no estás sola ni un solo instante. Somos una familia y avanzamos unidos, cada uno poniendo su mano junto a la tuya.',
+      'Tu sonrisa sigue siendo uno de mis lugares favoritos. Y cuando hoy no aparece, mi amor se queda contigo igualmente.',
+      'Eres hogar para nosotros. Ahora nosotros también queremos ser ese lugar seguro donde puedes descansar.',
+      'Te queremos en los días luminosos, en los días grises y en todos los colores que existen entre medias.',
+      'Tu forma de mirar a los demás con cariño hace que el mundo sea un lugar un poquito más amable.',
+      'No tienes que encontrar siempre las palabras. Podemos estar juntos en silencio y seguir diciéndonos cuánto nos queremos.',
+      'Hoy estamos aquí: papá, la hermana y yo. Cada uno a su manera, pero todos muy cerca de ti.',
+      'Tu valentía también consiste en dejarte ayudar, descansar y decir lo que necesitas. Nosotros te escuchamos.',
+      'Eres mucho más que cualquier día difícil. Eres tus risas, tus enseñanzas, tu fe y todo el amor que compartes.',
+      'Cuando necesites un poquito de luz, recuerda que en casa hay tres corazones encendidos para ti.',
+      'Dios camina contigo y nosotros también. No hace falta ver todo el camino para dar juntos el siguiente paso.',
+      'Tu manera de creer nos enseña que la esperanza puede ser suave, paciente y estar presente incluso en silencio.',
+      'Cada día contigo contiene algo valioso: una conversación, una mirada, una broma o simplemente sentirte cerca.',
+      'Puedes hablar de lo que sientes sin protegernos. Tu alegría cabe aquí, y también tu cansancio y tus miedos.',
+      'Mamá, nos importas tú: cómo estás, qué necesitas y qué te apetece. Estamos aquí para escucharte de verdad.',
+      'Todo lo que das como madre y como maestra sigue vivo en la forma en que queremos, aprendemos y cuidamos.',
+      'Hoy no medimos el día por todo lo que haces, sino por los momentos en los que te sientes querida y acompañada.',
+      'Si el día se hace largo, vamos minuto a minuto. Si se hace ligero, lo disfrutamos contigo. Siempre en familia.',
+      'Tienes permiso para parar, cambiar de idea, pedir un abrazo o querer estar tranquila. Seguimos cerca de ti.',
+      'Tu voz, tus historias y hasta tus pequeñas manías forman parte del hogar que tanto queremos.',
+      'Mamá, eres una bendición cotidiana: de esas que no necesitan hacer ruido para llenar una casa entera.',
+      'Nuestra familia no necesita palabras perfectas. Nos basta con querernos como sabemos y permanecer juntos.',
+      'Pienso en ti y siento gratitud. Por quien eres, por cómo quieres y por la vida que compartimos contigo.',
+      'Hoy quiero recordarte algo sencillo: te queremos muchísimo, exactamente aquí y exactamente ahora.',
+      'La ternura que has dado a tus alumnos también vive en nosotros. Tu forma de enseñar nace siempre del corazón.',
+      'Hay un abrazo de papá, otro de la hermana y otro mío esperándote. Puedes elegir uno o quedarte con los tres.',
+      'No tienes que animarnos ni cuidar de cómo nos sentimos. Hoy queremos cuidarte nosotros a ti.',
+      'Aunque no podamos ordenar todas las incertidumbres, sí podemos llenar este día de presencia, cariño y compañía.',
+      'Tu fe no exige que nunca tengas miedo. También puede ser ese lugar donde descansas mientras todos te acompañamos.',
+      'Cada pequeño momento compartido contigo cuenta. Para nosotros no hay compañía más sencilla ni más valiosa.',
+      'Mamá, tu luz no depende de estar alegre todo el tiempo. También brilla cuando eres sincera y te permites descansar.',
+      'Estamos aprendiendo juntos a vivir este día tal como viene, sin dejar que nos quite el cariño que sentimos.',
+      'Puedes apoyarte en nosotros todo lo que necesites. El amor de una familia también sirve para repartir el peso.',
+      'Hoy te mando un abrazo sin prisas, de esos que no piden nada y se quedan el tiempo que haga falta.',
+      'Eres nuestra maestra de tantas cosas, pero ahora no necesitas enseñarnos nada: solo déjate acompañar.',
+      'Que hoy encuentres una pequeña alegría y, si no aparece, que al menos sientas muy cerca todo nuestro amor.',
+      'Como siempre te digo, mamá: este partido lo juegas tú y tú marcas el ritmo, pero nunca estás sola en el campo. Papá, la hermana y yo estamos en el banquillo para animarte en cada jugada, sostenerte cuando llegue el bajón y saltar contigo a celebrar cada pequeña victoria.',
+      'Todo lo que enseñaste con paciencia, fe y ternura permanece en tus alumnos. La luz que encendiste en ellos sigue acompañándolos.'
+    ];
+    const faith = [
+      {question:'¿Qué persona ha sido hoy una pequeña señal de amor para ti?',mission:'Escríbele un mensaje breve, dale las gracias o dedica un minuto a rezar por ella.'},
+      {question:'¿En qué momento del día te has sentido acompañada?',mission:'Cuéntaselo a alguien cercano empezando por: “Hoy me hizo bien…”'},
+      {question:'¿Qué tres personas aparecen primero cuando piensas en amor?',mission:'Cierra los ojos, nombra a cada una despacio y dedícales un deseo bonito.'},
+      {question:'¿Qué palabra necesitas escuchar hoy?',mission:'Escríbela en una nota y repítetela con el mismo cariño que darías a tus alumnos.'},
+      {question:'¿Qué recuerdo te hace sonreír incluso en un día difícil?',mission:'Busca una foto relacionada y compártela con alguien que vivió ese momento contigo.'},
+      {question:'¿Qué cosa pequeña de hoy merece un gracias?',mission:'Anótala arriba y di en voz baja: “Gracias por este pequeño regalo”.'},
+      {question:'¿Quién podría necesitar hoy un poquito de tu luz?',mission:'Regálale un mensaje, una llamada corta o simplemente tenla presente en tu oración.'}
+    ];
+    const dailyPrayers=[
+      'Señor, dame serenidad para este momento, fuerza para este día y la certeza de que camino acompañada.',
+      'Señor, quédate cerca de mí. Calma mis pensamientos y ayúdame a recibir este día tal como viene.',
+      'Jesús, pongo en tus manos mis miedos y mis esperanzas. Sostén mi corazón y guía cada uno de mis pasos.',
+      'Padre bueno, enséñame a descansar en tu amor y a reconocer tu presencia en las personas que me cuidan.',
+      'Señor, regálame paciencia conmigo misma, ternura para este momento y confianza para el siguiente paso.',
+      'María, Madre buena, cúbreme con tu manto y acompáñame hoy con tu dulzura y tu fortaleza.',
+      'Dios mío, cuando no encuentre palabras, escucha mi silencio. Tú conoces todo lo que guarda mi corazón.',
+      'Señor, ayúdame a vivir sin adelantarme a mañana. Dame la gracia necesaria para este día y para este instante.',
+      'Jesús, sé mi descanso cuando aparezca el cansancio y mi luz cuando el camino parezca incierto.',
+      'Padre, gracias por mi familia. Bendice sus manos, sus palabras y todo el amor con el que caminamos unidos.',
+      'Señor, abre mis ojos a las pequeñas alegrías de hoy y haz que pueda recibirlas con un corazón agradecido.',
+      'Jesús, toma aquello que pesa demasiado. Recuérdame que puedo apoyarme en Ti y dejarme sostener por quienes me quieren.',
+      'Dios de esperanza, renueva mi ánimo con suavidad. Que no me exija más de lo que hoy puedo dar.',
+      'Señor, acompaña a quienes me cuidan. Dales también descanso, paciencia, consuelo y la certeza de mi amor.',
+      'Padre bueno, llena nuestro hogar de paz. Que sepamos escucharnos, abrazarnos y permanecer juntos.',
+      'Jesús, ayúdame a reconocer mi propia fuerza sin olvidar que también puedo pedir ayuda y descansar.',
+      'Señor, bendice a todas las personas que llevo en el corazón. Hazles sentir hoy un poquito de mi cariño.',
+      'María, camina a mi lado. Cuando llegue la inquietud, recuérdame que soy hija amada y nunca estoy sola.',
+      'Dios mío, recibo este nuevo día como un regalo. Dame ojos para descubrir la luz que contiene.',
+      'Señor, pon calma en mi respiración, paz en mi mente y esperanza en cada rincón de mi corazón.',
+      'Jesús, no te pido entenderlo todo. Te pido sentir tu mano y confiar en que permaneces conmigo.',
+      'Padre, ayúdame a tratarme con cariño, a escuchar lo que necesito y a aceptar mi propio ritmo.',
+      'Señor, gracias por el amor que me rodea. Que hoy pueda descansar en él sin miedo y sin prisa.',
+      'Jesús, transforma este momento en un espacio de encuentro contigo. Háblame en la calma y acompáñame en el silencio.',
+      'Dios de misericordia, recibe mis preocupaciones. Dame claridad para lo que puedo hacer y paz para lo que debo entregar.',
+      'Señor, que hoy no me falte una mano cercana, una palabra sincera y la confianza en tu presencia.',
+      'María, guarda a mi familia y mantenla unida. Enséñanos a cuidar unos de otros con paciencia y ternura.',
+      'Padre bueno, dame valor para expresar lo que siento y humildad para aceptar todo el amor que quieren darme.',
+      'Jesús, acompáñame paso a paso. Celebra conmigo cada pequeña victoria y sostenme cuando necesite parar.',
+      'Señor, aquí estoy, tal como soy y tal como me siento. Recíbeme, abrázame y permanece conmigo. Amén.'
+    ];
+    const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+    const now = new Date();
+    const dayIndex = Math.floor(new Date(now.getFullYear(),now.getMonth(),now.getDate()) / 86400000);
+    const today = quotes[((dayIndex % quotes.length) + quotes.length) % quotes.length];
+    $('#dailyQuote').textContent=today[0]; $('#dailyVerse').textContent=today[1];
+    $('#date').textContent=now.toLocaleDateString('es-ES',{weekday:'long',day:'numeric',month:'long'});
+    const hour=now.getHours(); $('#greeting').textContent=(hour<13?'Buenos días':hour<20?'Buenas tardes':'Buenas noches')+', mamá';
+    let messageIndex=((dayIndex%messages.length)+messages.length)%messages.length;
+    const showMessage=()=>$('#familyMessage').textContent=messages[messageIndex]; showMessage();
+    $('#newMessage').onclick=()=>{messageIndex=(messageIndex+1)%messages.length;showMessage()};
+    const todayFaith=faith[((dayIndex%faith.length)+faith.length)%faith.length];
+    $('#faithPrompt').textContent=todayFaith.question;$('#faithMission').textContent=todayFaith.mission;
+    $('#dailyPrayer').textContent=dailyPrayers[((dayIndex%dailyPrayers.length)+dailyPrayers.length)%dailyPrayers.length];
+    const missionKey='luz-mision-'+now.toISOString().slice(0,10);
+    function setMissionDone(done){$('#missionDone').textContent=done?'Hecho con amor ✓':'Lo he hecho hoy';$('#missionDone').classList.toggle('mission-done',done)}
+    setMissionDone(localStorage.getItem(missionKey)==='done');
+    $('#missionDone').onclick=()=>{localStorage.setItem(missionKey,'done');setMissionDone(true)};
+
+    function go(id){$$('.view').forEach(v=>v.classList.toggle('active',v.id===id));$$('nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===id));scrollTo({top:0,behavior:'smooth'})}
+    $$('[data-view]').forEach(b=>b.onclick=()=>go(b.dataset.view)); $$('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
+
+    const mantras=['Mi cuerpo es fuerte.','Mi mente es fuerte.','El Señor está conmigo.','Yo puedo.','Respiro calma y suelto el miedo.','Estoy rodeada de amor.','Dios sostiene cada uno de mis pasos.','Hoy voy a mi ritmo.'];
+    let breathing=false,timers=[],mantraIndex=0;
+    $('#breathBtn').onclick=()=>{
+      if(breathing){stopBreath(false);return}
+      breathing=true; $('#breathBtn').textContent='Terminar';
+      const endsAt=Date.now()+60000;
+      const tick=()=>{const left=Math.max(0,Math.ceil((endsAt-Date.now())/1000));$('#countdown').textContent=Math.floor(left/60)+':'+String(left%60).padStart(2,'0');if(left===0)stopBreath(true)};
+      tick();timers.push(setInterval(tick,250));
+      mantraIndex=0;$('#mantra').textContent=mantras[mantraIndex];
+      const cycle=()=>{if(!breathing)return;$('#breathText').textContent='Inspira…';$('#orb').className='orb inhale';$('#mantra').textContent=mantras[mantraIndex%mantras.length];mantraIndex++;timers.push(setTimeout(()=>{if(!breathing)return;$('#breathText').textContent='Suelta el aire…';$('#orb').className='orb exhale'},4000));timers.push(setTimeout(cycle,8000))};cycle();
+    };
+    function stopBreath(completed){breathing=false;timers.forEach(clearTimeout);timers=[];$('#orb').className='orb';$('#breathBtn').textContent='Empezar 1 minuto';$('#breathText').textContent=completed?'Muy bien 💛':'Preparada';$('#countdown').textContent=completed?'0:00':'1:00';$('#mantra').textContent=completed?'Lo has hecho. Guarda esta calma contigo.':'Este minuto es solo para ti.'}
+
+    const flowers=['🌸','🌼','🌷','🌺','🌻','🪻']; let gardenItems=[];
+    try{gardenItems=JSON.parse(localStorage.getItem('luz-jardin')||'[]')}catch(e){}
+    function renderGarden(){
+      $('#garden').innerHTML='';gardenItems.forEach(item=>{const f=document.createElement('span');f.className='flower';f.style.left=item.x+'%';f.style.top=item.y+'%';f.title=item.kind+': '+item.text;const icon=document.createElement('span');icon.className='flower-icon';icon.textContent=item.flower;const name=document.createElement('span');name.className='flower-name';name.textContent=item.text;f.append(icon,name);$('#garden').appendChild(f)});
+      const n=gardenItems.length;$('#gardenCount').textContent=n===0?'Tu jardín está esperando la primera flor':n===1?'Una persona o pensamiento ya florece aquí 🌱':`${n} personas y pensamientos florecen en tu jardín`;
+    }
+    $('#plantFlower').onclick=()=>{const input=$('#gardenThought'),text=input.value.trim();if(!text){input.focus();input.placeholder='¿Por quién o por qué será esta flor?';return}const col=gardenItems.length%4,row=Math.floor(gardenItems.length/4)%3;gardenItems.push({text,kind:$('#gardenKind').value,flower:flowers[Math.floor(Math.random()*flowers.length)],x:15+col*23+Math.random()*5,y:48+row*20+Math.random()*5});localStorage.setItem('luz-jardin',JSON.stringify(gardenItems));input.value='';renderGarden();if(navigator.vibrate)navigator.vibrate(18)};
+    $('#clearGarden').onclick=()=>{gardenItems=[];localStorage.removeItem('luz-jardin');renderGarden()};renderGarden();
+
+    $$('[data-devotion]').forEach(b=>b.onclick=()=>{$$('[data-devotion]').forEach(x=>x.classList.toggle('active',x===b));$$('.devotion').forEach(x=>x.classList.toggle('active',x.id===b.dataset.devotion))});
+
+    let notes=[];try{notes=JSON.parse(localStorage.getItem('luz-gratitudes')||'[]')}catch(e){}
+    function renderNotes(){$('#gratitudes').innerHTML='';notes.forEach((n,i)=>{const d=document.createElement('div');d.className='note';const s=document.createElement('span');s.textContent='💛 '+n;const b=document.createElement('button');b.textContent='×';b.setAttribute('aria-label','Borrar');b.onclick=()=>{notes.splice(i,1);persist()};d.append(s,b);$('#gratitudes').appendChild(d)})}
+    function persist(){localStorage.setItem('luz-gratitudes',JSON.stringify(notes));renderNotes()}
+    $('#saveGratitude').onclick=()=>{const v=$('#gratitude').value.trim();if(!v)return;notes.unshift(v);notes=notes.slice(0,20);persist();$('#gratitude').value='';$('#saved').classList.add('show');setTimeout(()=>$('#saved').classList.remove('show'),1800)};renderNotes();
+  </script>
+</body>
+</html>
