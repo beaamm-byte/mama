@@ -402,7 +402,11 @@
     }
     santaDays.forEach((d,i)=>makeAccordion($('#santaAccordions'),d,i,'santa'));leopoldoDays.forEach((d,i)=>makeAccordion($('#leopoldoAccordions'),d,i,'leopoldo'));
 
-    $$('[data-devotion]').forEach(b=>b.onclick=()=>{$$('[data-devotion]').forEach(x=>x.classList.toggle('active',x===b));$$('.devotion').forEach(x=>x.classList.toggle('active',x.id===b.dataset.devotion))});
+    $$('[data-devotion]').forEach(b=>b.onclick=()=>{
+      $$('.saint-photo[open]').forEach(photo=>photo.open=false);
+      $$('[data-devotion]').forEach(x=>x.classList.toggle('active',x===b));
+      $$('.devotion').forEach(x=>x.classList.toggle('active',x.id===b.dataset.devotion));
+    });
 
     let notes=[];try{notes=JSON.parse(localStorage.getItem('luz-gratitudes')||'[]')}catch(e){}
     function renderNotes(){$('#gratitudes').innerHTML='';$('#gratitudeCount').textContent=notes.length+' '+(notes.length===1?'guardado':'guardados');notes.forEach((n,i)=>{const d=document.createElement('div');d.className='note';const s=document.createElement('span');s.textContent='💛 '+n;const b=document.createElement('button');b.textContent='×';b.setAttribute('aria-label','Borrar');b.onclick=()=>{notes.splice(i,1);persist()};d.append(s,b);$('#gratitudes').appendChild(d)})}
