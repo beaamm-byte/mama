@@ -48,10 +48,7 @@
     .orb-content{display:flex;flex-direction:column;align-items:center;gap:7px}.orb span{font-family:Georgia,serif;font-size:1.2rem;color:#46594d}.countdown{font:600 1.65rem/1 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#536e5c;letter-spacing:.03em;font-variant-numeric:tabular-nums}
     .primary{border:0;border-radius:99px;background:var(--sage);color:white;font-weight:700;padding:14px 24px;min-width:180px;box-shadow:0 8px 20px rgba(120,146,129,.25)}
     .secondary{border:1px solid #d8ded9;background:white;border-radius:99px;padding:12px 18px;color:var(--ink)}
-    .garden-form{padding:20px}.garden-form label{display:block;margin-bottom:10px}.garden-form select,.garden-form input{width:100%;border:1px solid #dce2dc;background:white;border-radius:15px;padding:13px 14px;color:var(--ink);outline:none;margin-bottom:10px}.garden-form input:focus,.garden-form select:focus{border-color:var(--sage)}
-    .garden{min-height:310px;position:relative;overflow:hidden;background:linear-gradient(#e9f2ed 0 62%,#d9cbb2 62%);border-radius:26px;box-shadow:var(--shadow);touch-action:manipulation}
-    .garden:before{content:'Tu jardín irá guardando cada pensamiento';position:absolute;width:100%;top:20px;text-align:center;color:#718077;font-size:.82rem}.flower{position:absolute;transform:translate(-50%,-50%) scale(0);animation:bloom .55s cubic-bezier(.2,1.5,.5,1) forwards;filter:drop-shadow(0 5px 3px rgba(0,0,0,.08));user-select:none;text-align:center}.flower-icon{display:block;font-size:2.4rem}.flower-name{display:block;max-width:90px;padding:3px 7px;border-radius:10px;background:rgba(255,253,250,.9);font-size:.67rem;font-weight:700;color:#536158;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-shadow:0 2px 8px rgba(0,0,0,.08)}@keyframes bloom{to{transform:translate(-50%,-50%) scale(1)}}
-    .garden-count{text-align:center;margin:15px;color:var(--muted)}
+    .release-card label{display:block;margin-bottom:11px}.release-card textarea{background:#fffefa}.privacy-note{display:block;text-align:center;color:var(--muted);font-size:.76rem;margin:10px 0 0}.release-stage{height:230px;position:relative;overflow:hidden;border-radius:25px;background:radial-gradient(circle at 50% 85%,#fff8d9 0,#e6efe8 42%,#d4e3dc 100%);display:grid;place-items:center;margin:14px 0;box-shadow:var(--shadow)}.release-stage:before{content:'✦';position:absolute;top:24px;color:rgba(201,168,93,.45);font-size:1.5rem}.thought-paper{max-width:82%;max-height:120px;overflow:hidden;background:rgba(255,253,250,.94);padding:16px 20px;border-radius:14px;box-shadow:0 9px 25px rgba(68,74,69,.14);font:1.03rem/1.45 Georgia,serif;text-align:center;color:#515b54;opacity:0;transform:translateY(20px) scale(.9)}.thought-paper.ready{opacity:1;transform:none;transition:.3s}.thought-paper.releasing{animation:releaseThought 1.5s ease-in forwards}@keyframes releaseThought{0%{opacity:1;filter:blur(0);transform:none}45%{transform:translateY(-15px) scale(1.04);color:#789281}100%{opacity:0;filter:blur(10px);transform:translateY(-105px) scale(.65) rotate(3deg)}}.light-particle{position:absolute;left:50%;top:52%;color:#d4ad58;pointer-events:none;animation:floatLight 1.45s ease-out forwards}@keyframes floatLight{from{opacity:0;transform:translate(0,0) scale(.3)}20%{opacity:1}to{opacity:0;transform:translate(var(--x),var(--y)) scale(1.3) rotate(var(--r))}}.release-response{display:none;background:linear-gradient(145deg,#fffdfa,#f5ebe1);text-align:center}.release-response.show{display:block;animation:fade .55s ease}.release-response .new-thought{font:1.28rem/1.6 Georgia,serif;margin:14px 0}.release-response .label{color:var(--gold)}
     textarea{width:100%;min-height:110px;border:1px solid #dce2dc;background:#fff;border-radius:18px;padding:16px;resize:none;color:var(--ink);outline:none}textarea:focus{border-color:var(--sage)}
     .row{display:flex;gap:10px;align-items:center;margin-top:12px}.row .primary{min-width:0;flex:1}.saved{font-size:.9rem;color:var(--sage);opacity:0;transition:.2s}.saved.show{opacity:1}
     .gratitudes{margin-top:18px;display:grid;gap:9px}.note{background:#fff9e8;padding:13px 15px;border-radius:15px;display:flex;gap:10px;line-height:1.4}.note button{margin-left:auto;border:0;background:none;color:#999}
@@ -78,7 +75,7 @@
       </article>
       <div class="actions">
         <button class="action" data-go="calma"><span>🌿</span><strong>Un minuto de calma</strong><small>Respira despacio conmigo</small></button>
-        <button class="action" data-go="jardin"><span>🌸</span><strong>Haz florecer algo</strong><small>Un jardín para jugar</small></button>
+        <button class="action" data-go="jardin"><span>🍃</span><strong>Suelta lo que pesa</strong><small>Deja ir un pensamiento</small></button>
       </div>
       <article class="card family">
         <div class="heart">💗</div><div><div class="label">De mí para ti</div><p id="familyMessage"></p></div>
@@ -97,21 +94,15 @@
     </section>
 
     <section class="view" id="jardin">
-      <h2>El jardín de quienes me dan luz</h2><p class="intro">Planta una flor por una persona, un recuerdo o algo concreto que quieras cuidar hoy.</p>
-      <article class="card garden-form">
-        <label class="label" for="gardenKind">Esta flor será por…</label>
-        <select id="gardenKind">
-          <option value="una persona que quiero">Una persona que quiero</option>
-          <option value="un recuerdo bonito">Un recuerdo bonito</option>
-          <option value="algo que agradezco">Algo que agradezco</option>
-          <option value="un deseo o una esperanza">Un deseo o una esperanza</option>
-        </select>
-        <input id="gardenThought" maxlength="45" placeholder="Escribe un nombre o unas palabras">
-        <button class="primary" id="plantFlower" style="width:100%">Plantar esta flor</button>
+      <h2>Suelta lo que pesa</h2><p class="intro">Escribe ese pensamiento que ocupa demasiado espacio. Aquí puedes reconocerlo y dejarlo marchar.</p>
+      <article class="card release-card">
+        <label class="label" for="releaseThought">Hoy quiero soltar…</label>
+        <textarea id="releaseThought" maxlength="240" placeholder="Escribe lo que te preocupa, te cansa o te da miedo"></textarea>
+        <button class="primary" id="releaseBtn" style="width:100%;margin-top:12px">Dejarlo ir 🍃</button>
+        <small class="privacy-note">Lo que escribes no se guarda ni sale de este teléfono.</small>
       </article>
-      <div class="garden" id="garden" role="button" aria-label="Toca para plantar flores"></div>
-      <div class="garden-count" id="gardenCount">Tu jardín está esperando la primera flor</div>
-      <button class="secondary" id="clearGarden" style="width:100%">Empezar un jardín nuevo</button>
+      <div class="release-stage" id="releaseStage" aria-hidden="true"><div class="thought-paper" id="thoughtPaper">Aquí aparecerá tu pensamiento antes de dejarlo marchar.</div></div>
+      <article class="card release-response" id="releaseResponse" aria-live="polite"><div class="label">Un pensamiento nuevo para ti</div><p class="new-thought" id="newThought"></p><button class="secondary" id="releaseAgain">Quiero soltar otra cosa</button></article>
     </section>
 
     <section class="view" id="gratitud">
@@ -160,7 +151,7 @@
   <nav aria-label="Navegación principal">
     <button class="active" data-view="home"><span>☀️</span>Hoy</button>
     <button data-view="calma"><span>🌿</span>Calma</button>
-    <button data-view="jardin"><span>🌸</span>Jardín</button>
+    <button data-view="jardin"><span>🍃</span>Soltar</button>
     <button data-view="gratitud"><span>💛</span>Gracias</button>
     <button data-view="oraciones"><span>🙏</span>Orar</button>
   </nav>
@@ -325,14 +316,23 @@
     };
     function stopBreath(completed){breathing=false;timers.forEach(clearTimeout);timers=[];$('#orb').className='orb';$('#breathBtn').textContent='Empezar 1 minuto';$('#breathText').textContent=completed?'Muy bien 💛':'Preparada';$('#countdown').textContent=completed?'0:00':'1:00';$('#mantra').textContent=completed?'Lo has hecho. Guarda esta calma contigo.':'Este minuto es solo para ti.'}
 
-    const flowers=['🌸','🌼','🌷','🌺','🌻','🪻']; let gardenItems=[];
-    try{gardenItems=JSON.parse(localStorage.getItem('luz-jardin')||'[]')}catch(e){}
-    function renderGarden(){
-      $('#garden').innerHTML='';gardenItems.forEach(item=>{const f=document.createElement('span');f.className='flower';f.style.left=item.x+'%';f.style.top=item.y+'%';f.title=item.kind+': '+item.text;const icon=document.createElement('span');icon.className='flower-icon';icon.textContent=item.flower;const name=document.createElement('span');name.className='flower-name';name.textContent=item.text;f.append(icon,name);$('#garden').appendChild(f)});
-      const n=gardenItems.length;$('#gardenCount').textContent=n===0?'Tu jardín está esperando la primera flor':n===1?'Una persona o pensamiento ya florece aquí 🌱':`${n} personas y pensamientos florecen en tu jardín`;
-    }
-    $('#plantFlower').onclick=()=>{const input=$('#gardenThought'),text=input.value.trim();if(!text){input.focus();input.placeholder='¿Por quién o por qué será esta flor?';return}const col=gardenItems.length%4,row=Math.floor(gardenItems.length/4)%3;gardenItems.push({text,kind:$('#gardenKind').value,flower:flowers[Math.floor(Math.random()*flowers.length)],x:15+col*23+Math.random()*5,y:48+row*20+Math.random()*5});localStorage.setItem('luz-jardin',JSON.stringify(gardenItems));input.value='';renderGarden();if(navigator.vibrate)navigator.vibrate(18)};
-    $('#clearGarden').onclick=()=>{gardenItems=[];localStorage.removeItem('luz-jardin');renderGarden()};renderGarden();
+    const releaseThemes=[
+      {words:['miedo','temor','asusta','asust','pánico','panico'],responses:['El miedo puede hablar, pero no decide el siguiente paso. Hoy puedes avanzar despacio y acompañada.','No necesitas vencer todo el miedo ahora. Respira: este momento es más pequeño que todo el camino.']},
+      {words:['cáncer','cancer','tumor','quimio','tratamiento','enfermedad','médico','medico','prueba','resultado','dolor'],responses:['Tu cuerpo atraviesa mucho y merece paciencia, descanso y ternura. No tienes que llevar este momento sola.','Hoy no necesitas resolver todo el camino. Deja que el cuidado, la medicina y el amor te acompañen paso a paso.']},
+      {words:['cansada','cansancio','agotada','agotamiento','fuerzas','dormir'],responses:['Descansar no significa rendirse. También es una forma de cuidar la fuerza que vive en ti.','Tu valor no depende de cuánto puedas hacer hoy. Escuchar a tu cuerpo también es avanzar.']},
+      {words:['culpa','culpable','debería','deberia','fallado','fallé','falle'],responses:['Puedes hablarte con la misma compasión que ofreces a los demás. No necesitas castigarte para aprender.','Lo que hoy harías de otra manera no borra todo el amor que pones en tu vida. Trátate con ternura.']},
+      {words:['futuro','mañana','incertidumbre','no sé','no se','qué pasará','que pasara','resultado'],responses:['No hace falta vivir mañana antes de que llegue. Hoy solo pide presencia para este momento.','La incertidumbre no tiene todas las respuestas, pero tampoco escribe por sí sola el final de la historia.']},
+      {words:['sola','soledad','nadie','aislada'],responses:['Aunque la soledad se haga sentir, hay manos y corazones cerca de ti. Puedes llamarnos y dejarte acompañar.','No tienes que esperar a sentirte mejor para buscar compañía. Tu familia quiere estar contigo tal como estás.']},
+      {words:['triste','tristeza','llorar','llanto','bajón','bajon'],responses:['La tristeza puede quedarse un rato sin ocuparlo todo. No tienes que esconderla ni atravesarla sola.','Hoy puedes sentirte así y seguir siendo tú, entera y profundamente querida.']},
+      {words:['enfado','enfadada','rabia','injusto','injusticia'],responses:['Tu enfado señala que algo te importa. Puedes escucharlo sin permitir que te robe toda la calma.','Suelta por ahora la lucha que agota. Ya habrá espacio para decidir qué hacer con lo que sientes.']},
+      {words:['familia','hija','hijo','marido','papá','papa','hermana'],responses:['El amor de la familia no exige palabras perfectas. Podemos hablar, callar y sostenernos unos a otros.','Lo que pesa se hace un poco más ligero cuando lo compartimos. Tu familia está en tu equipo.']},
+      {words:['dios','señor','fe','rezar','oración','oracion'],responses:['La fe también puede contener dudas y cansancio. Dios escucha incluso aquello que no sabes cómo decir.','Puedes poner este pensamiento en manos de Dios y descansar un instante: no tienes que explicarlo todo.']}
+    ];
+    const releaseFallback=['Este pensamiento merece ser escuchado, pero no tiene que dirigir todo tu día. Ahora puedes dejarle un poco menos de espacio.','No eres este pensamiento. Eres mucho más grande que este momento y estás rodeada de amor.','No necesitas resolverlo todo ahora. Has reconocido lo que pesa; el siguiente paso puede ser simplemente respirar.','Lo que sientes es real, pero no tienes que sostenerlo a solas. Permite que hoy el cariño comparta un poco de su peso.'];
+    function chooseReleaseResponse(text){const normalized=text.toLocaleLowerCase('es').normalize('NFD').replace(/[\u0300-\u036f]/g,'');let best=null,score=0;releaseThemes.forEach(theme=>{const hits=theme.words.filter(w=>normalized.includes(w.normalize('NFD').replace(/[\u0300-\u036f]/g,''))).length;if(hits>score){score=hits;best=theme}});const pool=best?best.responses:releaseFallback;return pool[Math.floor(Math.random()*pool.length)]}
+    function resetRelease(){const input=$('#releaseThought');input.value='';input.disabled=false;$('#releaseBtn').disabled=false;$('#releaseResponse').classList.remove('show');$('#thoughtPaper').className='thought-paper';$('#thoughtPaper').textContent='Aquí aparecerá tu pensamiento antes de dejarlo marchar.';input.focus()}
+    $('#releaseBtn').onclick=()=>{const input=$('#releaseThought'),thought=input.value.trim();if(!thought){input.focus();input.placeholder='Escribe primero aquello que quieres dejar ir';return}input.disabled=true;$('#releaseBtn').disabled=true;$('#releaseResponse').classList.remove('show');const paper=$('#thoughtPaper'),stage=$('#releaseStage');paper.textContent=thought;paper.className='thought-paper ready';setTimeout(()=>{paper.classList.add('releasing');for(let i=0;i<20;i++){const p=document.createElement('span');p.className='light-particle';p.textContent=i%3===0?'✦':'·';p.style.setProperty('--x',(Math.random()*260-130)+'px');p.style.setProperty('--y',(-60-Math.random()*120)+'px');p.style.setProperty('--r',(Math.random()*180-90)+'deg');p.style.animationDelay=(Math.random()*.28)+'s';stage.appendChild(p);setTimeout(()=>p.remove(),1900)}if(navigator.vibrate)navigator.vibrate([20,35,20])},650);setTimeout(()=>{input.value='';paper.className='thought-paper ready';paper.textContent='Ya no está aquí.';$('#newThought').textContent=chooseReleaseResponse(thought);$('#releaseResponse').classList.add('show');$('#releaseResponse').scrollIntoView({behavior:'smooth',block:'center'})},2250)};
+    $('#releaseAgain').onclick=resetRelease;
 
     const santaDays=[
       {intro:'La Madre Maravillas comprendió el amor inmenso que nos ha tenido el Corazón de Jesús al quedarse con nosotros en el Santísimo Sacramento:',quote:'«El Señor se ha quedado aquí en el sagrario para que le amemos, le imitemos, para ser nuestra fortaleza y nuestro consuelo. Para que viva Cristo en mí y yo en Él».',prayer:'Corazón de Jesús, Rey y centro de todos los corazones, ten piedad de nosotros y concédenos, por intercesión de Santa Maravillas de Jesús, la gracia que humildemente te pedimos, si es tu voluntad y para tu gloria.'},
