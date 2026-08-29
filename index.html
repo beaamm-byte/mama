@@ -112,7 +112,7 @@
         <textarea id="gratitude" maxlength="180" placeholder="Escribe aquí algo pequeñito"></textarea>
         <div class="row"><button class="primary" id="saveGratitude">Guardar en mi corazón</button><span class="saved" id="saved">Guardado ✓</span></div>
         <details class="private-gratitudes">
-          <summary>Mis agradecimientos guardados <span class="gratitude-count" id="gratitudeCount">0 guardados</span></summary>
+          <summary>Mis agradecimientos <span class="gratitude-count" id="gratitudeCount">0</span></summary>
           <div class="gratitudes" id="gratitudes"></div>
         </details>
       </article>
@@ -409,7 +409,7 @@
     });
 
     let notes=[];try{notes=JSON.parse(localStorage.getItem('luz-gratitudes')||'[]')}catch(e){}
-    function renderNotes(){$('#gratitudes').innerHTML='';$('#gratitudeCount').textContent=notes.length+' '+(notes.length===1?'guardado':'guardados');notes.forEach((n,i)=>{const d=document.createElement('div');d.className='note';const s=document.createElement('span');s.textContent='💛 '+n;const b=document.createElement('button');b.textContent='×';b.setAttribute('aria-label','Borrar');b.onclick=()=>{notes.splice(i,1);persist()};d.append(s,b);$('#gratitudes').appendChild(d)})}
+    function renderNotes(){$('#gratitudes').innerHTML='';$('#gratitudeCount').textContent=notes.length;notes.forEach((n,i)=>{const d=document.createElement('div');d.className='note';const s=document.createElement('span');s.textContent='💛 '+n;const b=document.createElement('button');b.textContent='×';b.setAttribute('aria-label','Borrar');b.onclick=()=>{notes.splice(i,1);persist()};d.append(s,b);$('#gratitudes').appendChild(d)})}
     function persist(){localStorage.setItem('luz-gratitudes',JSON.stringify(notes));renderNotes()}
     $('#saveGratitude').onclick=()=>{const v=$('#gratitude').value.trim();if(!v)return;notes.unshift(v);notes=notes.slice(0,20);persist();$('#gratitude').value='';$('#saved').classList.add('show');setTimeout(()=>$('#saved').classList.remove('show'),1800)};renderNotes();
   </script>
