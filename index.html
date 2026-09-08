@@ -27,7 +27,7 @@
     .eyebrow{font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;color:var(--sage);font-weight:750}
     h1{font-family:Georgia,serif;font-size:2.15rem;line-height:1.04;margin:.35rem 0 .2rem;font-weight:500;color:#39453d}
     .date{color:var(--muted);font-size:.9rem}
-    .sun{font-size:2rem;width:54px;height:54px;border-radius:50%;display:grid;place-items:center;background:#fff7d8;box-shadow:var(--shadow)}
+    .header-actions{display:flex;align-items:center;gap:9px}.sun{font-size:2rem;width:54px;height:54px;border-radius:50%;display:grid;place-items:center;background:#fff7d8;box-shadow:var(--shadow)}.inbox-button{position:relative;width:46px;height:46px;border:1px solid rgba(120,146,129,.18);border-radius:50%;display:grid;place-items:center;background:var(--paper);color:#5d7564;box-shadow:var(--shadow)}.inbox-button svg{width:23px;height:23px}.inbox-badge{position:absolute;right:-3px;top:-4px;min-width:20px;height:20px;padding:0 5px;border-radius:99px;display:grid;place-items:center;background:var(--rose);color:white;border:2px solid var(--cream);font-size:.67rem;font-weight:800}.inbox-badge[hidden]{display:none}
     .view{display:none;animation:fade .35s ease}.view.active{display:block}@keyframes fade{from{opacity:0;transform:translateY(6px)}}
     .card{background:var(--paper);border:1px solid rgba(120,146,129,.14);border-radius:26px;padding:24px;margin:12px 0;box-shadow:var(--shadow)}
     .daily{background:linear-gradient(145deg,#fffdfa,#f7eee4);position:relative;overflow:hidden}
@@ -57,6 +57,7 @@
     nav{position:fixed;z-index:10;bottom:0;left:50%;transform:translateX(-50%);width:min(560px,100%);display:grid;grid-template-columns:repeat(5,1fr);padding:9px 8px calc(9px + env(safe-area-inset-bottom));background:rgba(255,253,250,.92);backdrop-filter:blur(18px);border-top:1px solid rgba(120,146,129,.15)}
     nav button{border:0;background:none;color:#828883;padding:7px 2px;font-size:.69rem}nav button span{display:block;font-size:1.3rem;margin-bottom:3px}nav button.active{color:#536e5c;font-weight:750}
     .toast{position:fixed;left:50%;bottom:100px;transform:translateX(-50%) translateY(15px);background:#3e4942;color:white;padding:11px 17px;border-radius:99px;opacity:0;pointer-events:none;transition:.25s;z-index:20;font-size:.88rem}.toast.show{opacity:1;transform:translateX(-50%)}
+    body.modal-open{overflow:hidden}.inbox-layer{position:fixed;z-index:100;inset:0;display:flex;align-items:flex-end;justify-content:center}.inbox-layer[hidden]{display:none}.layer-backdrop{position:absolute;inset:0;border:0;background:rgba(47,54,49,.46);backdrop-filter:blur(3px)}.inbox-sheet{position:relative;width:min(560px,100%);max-height:88vh;overflow:auto;background:var(--cream);border-radius:28px 28px 0 0;padding:21px 18px calc(25px + env(safe-area-inset-bottom));box-shadow:0 -15px 50px rgba(45,51,47,.22);animation:sheetUp .35s ease}.inbox-sheet-head{position:sticky;top:-21px;z-index:2;background:rgba(251,246,238,.95);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:space-between;padding:8px 2px 15px}.inbox-sheet h2{margin:2px 0}.icon-close{width:42px;height:42px;border:1px solid #d8ded9;border-radius:50%;background:white;color:#606862;font-size:1.35rem}.inbox-list{display:grid;gap:13px}.letter{background:linear-gradient(145deg,#fffdfa,#f8efe5);border:1px solid rgba(120,146,129,.16);border-radius:24px;padding:21px;box-shadow:var(--shadow)}.letter-date{color:var(--sage);font-size:.75rem;text-transform:uppercase;letter-spacing:.09em;font-weight:800}.letter-text{white-space:pre-wrap;font:1.16rem/1.62 Georgia,serif;margin:14px 0}.letter-photo{display:block;width:100%;max-height:430px;object-fit:cover;border-radius:18px;margin:15px 0}.letter-delete{display:block;margin:15px auto 0;border:0;background:transparent;color:#9a6762;text-decoration:underline;font-size:.85rem}.inbox-empty{text-align:center;color:var(--muted);line-height:1.55;padding:45px 22px}.inbox-empty span{display:block;color:var(--gold);font-size:2rem;margin-bottom:10px}.daily-popup{position:fixed;z-index:110;inset:0;display:grid;place-items:center;padding:20px}.daily-popup[hidden]{display:none}.daily-popup-card{position:relative;width:min(500px,100%);max-height:90vh;overflow:auto;background:var(--cream);border-radius:29px;padding:19px;box-shadow:0 20px 70px rgba(45,51,47,.3);animation:letterIn .42s ease}.daily-popup-heading{text-align:center;padding:5px 40px 15px}.daily-popup-heading .eyebrow{margin-bottom:7px}.daily-popup-heading h2{margin:0}.daily-popup-close{position:absolute;right:15px;top:14px;z-index:2}.letter-popup{margin:0}.popup-actions{display:grid;gap:7px;margin-top:14px}.popup-actions .primary{width:100%}.popup-actions .letter-delete{margin:5px auto 0}@keyframes sheetUp{from{transform:translateY(35px);opacity:0}}@keyframes letterIn{from{transform:translateY(12px) scale(.96);opacity:0}}@media(max-width:380px){.app{padding-left:13px;padding-right:13px}header{padding-left:2px;padding-right:2px}.header-actions{gap:6px}.sun{width:46px;height:46px}.inbox-button{width:43px;height:43px}}
     @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
   </style>
 </head>
@@ -64,7 +65,13 @@
   <main class="app">
     <header>
       <div><div class="eyebrow">Un ratito de luz</div><h1 id="greeting">Buenos días, mamá</h1><div class="date" id="date"></div></div>
-      <div class="sun" aria-hidden="true">☀️</div>
+      <div class="header-actions">
+        <button class="inbox-button" id="inboxButton" type="button" aria-label="Abrir mi bandeja de mensajes">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6.5h16v12H4z"/><path d="m4 7 8 6 8-6"/></svg>
+          <span class="inbox-badge" id="inboxBadge" hidden>0</span>
+        </button>
+        <div class="sun" aria-hidden="true">☀️</div>
+      </div>
     </header>
 
     <section class="view active" id="home">
@@ -186,6 +193,25 @@
     <button data-view="oraciones"><span>🙏</span>Orar</button>
   </nav>
   <div class="toast" id="toast">Una flor para ti 🌸</div>
+
+  <section class="inbox-layer" id="inboxPanel" role="dialog" aria-modal="true" aria-label="Mi bandeja de mensajes" hidden>
+    <button class="layer-backdrop" id="inboxBackdrop" type="button" aria-label="Cerrar bandeja"></button>
+    <div class="inbox-sheet">
+      <div class="inbox-sheet-head"><div><div class="eyebrow">Palabras para ti</div><h2>Mi bandejita</h2></div><button class="icon-close" id="closeInbox" type="button" aria-label="Cerrar">×</button></div>
+      <div class="inbox-list" id="inboxList"><div class="inbox-empty">Preparando tu bandejita…</div></div>
+      <p class="privacy-note" id="devicePairing" hidden>Para preparar tu buzón, dile a Bea este código: <strong id="deviceCode"></strong></p>
+    </div>
+  </section>
+
+  <section class="daily-popup" id="dailyMessagePopup" role="dialog" aria-modal="true" aria-label="Tienes un mensaje nuevo" hidden>
+    <button class="layer-backdrop" id="dailyPopupBackdrop" type="button" aria-label="Cerrar mensaje"></button>
+    <div class="daily-popup-card">
+      <button class="icon-close daily-popup-close" id="closeDailyMessage" type="button" aria-label="Cerrar">×</button>
+      <div class="daily-popup-heading"><div class="eyebrow">Ha llegado algo para ti</div><h2>Tu mensaje de hoy</h2></div>
+      <div id="dailyMessageContent"></div>
+      <div class="popup-actions"><button class="primary" id="saveDailyMessage" type="button" onclick="document.querySelector('#closeDailyMessage').click()">Guardar en mi bandejita</button><button class="letter-delete" id="deleteDailyMessage" type="button">Eliminar este mensaje</button></div>
+    </div>
+  </section>
 
   <script>
     const quotes = [
@@ -413,5 +439,8 @@
     function persist(){localStorage.setItem('luz-gratitudes',JSON.stringify(notes));renderNotes()}
     $('#saveGratitude').onclick=()=>{const v=$('#gratitude').value.trim();if(!v)return;notes.unshift(v);notes=notes.slice(0,20);persist();$('#gratitude').value='';$('#saved').classList.add('show');setTimeout(()=>$('#saved').classList.remove('show'),1800)};renderNotes();
   </script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="inbox.js"></script>
 </body>
 </html>

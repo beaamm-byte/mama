@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#fbf6ee">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Para mamá">
+  <link rel="icon" href="icono-luz.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icono-luz.svg">
+  <link rel="manifest" href="admin.webmanifest">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Panel privado · Un ratito de luz</title>
+  <style>
+    :root{--cream:#fbf6ee;--paper:#fffdfa;--ink:#3f4541;--muted:#737a75;--sage:#789281;--sage-light:#dfe9e1;--rose:#cb8f87;--gold:#c9a85d;--danger:#a65b56;--shadow:0 12px 35px rgba(68,74,69,.10)}
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}body{margin:0;background:var(--cream);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh}button,input,textarea{font:inherit}button{cursor:pointer}.wrap{max-width:720px;margin:auto;padding:28px 18px 70px}.top{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:22px}.eyebrow{font-size:.76rem;letter-spacing:.15em;text-transform:uppercase;color:var(--sage);font-weight:800}h1,h2{font-family:Georgia,serif;font-weight:500;color:#39453d}h1{font-size:2rem;margin:5px 0}h2{font-size:1.5rem;margin:0 0 7px}.sub{color:var(--muted);line-height:1.5;margin:0}.card{background:var(--paper);border:1px solid rgba(120,146,129,.16);border-radius:25px;padding:23px;margin:15px 0;box-shadow:var(--shadow)}label{display:block;color:#536e5c;font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;font-weight:800;margin:17px 0 7px}input,textarea{width:100%;border:1px solid #d8dfd9;background:#fff;border-radius:15px;padding:13px 14px;color:var(--ink);outline:none}input:focus,textarea:focus{border-color:var(--sage)}textarea{min-height:150px;resize:vertical}.primary,.secondary,.danger{border:0;border-radius:99px;padding:13px 19px;font-weight:750}.primary{background:var(--sage);color:#fff}.secondary{background:#fff;border:1px solid #d8dfd9;color:var(--ink)}.danger{background:#fff0ed;color:var(--danger)}.full{width:100%;margin-top:17px}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}.status{display:none;border-radius:14px;padding:12px 14px;margin:13px 0;font-size:.9rem;line-height:1.45}.status.show{display:block}.status.ok{background:#e7f2e9;color:#47634e}.status.error{background:#fff0ed;color:#8b4b47}.login{max-width:450px;margin:8vh auto}.admin-app[hidden],.login[hidden]{display:none}.photo-preview{display:none;width:100%;max-height:360px;object-fit:cover;border-radius:17px;margin-top:12px}.photo-preview.show{display:block}.hint{font-size:.79rem;color:var(--muted);line-height:1.45;margin-top:7px}.section-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.pill{background:var(--sage-light);color:#4d6555;border-radius:99px;padding:6px 10px;font-size:.76rem;font-weight:750}.list{display:grid;gap:11px;margin-top:16px}.empty{text-align:center;color:var(--muted);padding:18px 5px}.item{border:1px solid #e0e5e1;border-radius:18px;padding:16px;background:#fff}.item-date{color:var(--sage);font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em}.item-text{white-space:pre-wrap;line-height:1.55;margin:9px 0}.item img{width:100%;max-height:270px;object-fit:cover;border-radius:13px;margin-top:8px}.device{display:flex;align-items:center;justify-content:space-between;gap:12px}.device small{display:block;color:var(--muted);margin-top:4px}.approved{color:#52705b;font-weight:700}.logout{padding:10px 14px}.spinner{opacity:.6;pointer-events:none}@media(max-width:430px){.wrap{padding-left:13px;padding-right:13px}.card{padding:19px}.top{align-items:flex-start}.actions button{flex:1}.device{align-items:flex-start;flex-direction:column}.device button{width:100%}}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="login card" id="loginBox">
+      <div class="eyebrow">Un ratito de luz</div>
+      <h1>Panel privado</h1>
+      <p class="sub">Este espacio es solo para ti.</p>
+      <form id="loginForm">
+        <label for="loginEmail">Correo electrónico</label>
+        <input id="loginEmail" type="email" autocomplete="username" required>
+        <label for="loginPassword">Contraseña</label>
+        <input id="loginPassword" type="password" autocomplete="current-password" required>
+        <button class="primary full" type="submit">Entrar</button>
+      </form>
+      <div class="status" id="loginStatus" role="status"></div>
+    </section>
+
+    <section class="admin-app" id="adminApp" hidden>
+      <header class="top">
+        <div><div class="eyebrow">Administración</div><h1>Mensajes para mamá</h1></div>
+        <button class="secondary logout" id="logoutBtn">Salir</button>
+      </header>
+
+      <article class="card">
+        <div class="section-head"><div><h2 id="formTitle">Preparar un mensaje</h2><p class="sub">Aparecerá al abrir la app en la fecha elegida.</p></div></div>
+        <form id="messageForm">
+          <label for="messageDate">Día de publicación</label>
+          <input id="messageDate" type="date" required>
+          <label for="messageBody">Tu mensaje</label>
+          <textarea id="messageBody" maxlength="2000" placeholder="Escribe aquí lo que quieres decirle hoy…" required></textarea>
+          <label for="messagePhoto">Fotografía opcional</label>
+          <input id="messagePhoto" type="file" accept="image/*">
+          <p class="hint">Puedes hacer una foto en ese momento o elegirla de la galería. La app reducirá su tamaño antes de subirla.</p>
+          <img class="photo-preview" id="photoPreview" alt="Vista previa de la fotografía">
+          <div class="actions">
+            <button class="primary" id="publishBtn" type="submit">Publicar mensaje</button>
+            <button class="secondary" id="cancelEditBtn" type="button" hidden>Cancelar edición</button>
+          </div>
+        </form>
+        <div class="status" id="formStatus" role="status"></div>
+      </article>
+
+      <article class="card">
+        <div class="section-head"><div><h2>Dispositivos</h2><p class="sub">Autoriza aquí el móvil de tu madre.</p></div><span class="pill" id="pendingCount">0 pendientes</span></div>
+        <div class="list" id="deviceList"><div class="empty">Buscando dispositivos…</div></div>
+      </article>
+
+      <article class="card">
+        <div class="section-head"><div><h2>Mensajes publicados</h2><p class="sub">Puedes corregirlos o eliminarlos.</p></div></div>
+        <div class="list" id="messageList"><div class="empty">Cargando mensajes…</div></div>
+      </article>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script>
+    (()=>{
+      const $=s=>document.querySelector(s);
+      const cfg=window.APP_SUPABASE;
+      if(!cfg||!window.supabase){$('#loginStatus').className='status show error';$('#loginStatus').textContent='No se ha podido conectar. Comprueba internet y vuelve a abrir el panel.';$('#loginForm button').disabled=true;return}
+      const db=window.supabase.createClient(cfg.url,cfg.publishableKey,{auth:{storageKey:'luz-admin-session',persistSession:true,detectSessionInUrl:false}});
+      let editingId=null,editingPhotoPath=null,messages=[];
+      const localDate=()=>{const d=new Date(),o=d.getTimezoneOffset();return new Date(d-o*60000).toISOString().slice(0,10)};
+      const prettyDate=v=>new Intl.DateTimeFormat('es-ES',{weekday:'long',day:'numeric',month:'long',year:'numeric',timeZone:'UTC'}).format(new Date(v+'T12:00:00Z'));
+      const status=(el,text,type='ok')=>{el.textContent=text;el.className='status show '+type};
+      const clearStatus=el=>{el.textContent='';el.className='status'};
+      const setBusy=(busy)=>document.body.classList.toggle('spinner',busy);
+
+      async function checkSession(){
+        const {data:{session}}=await db.auth.getSession();
+        if(!session)return showLogin();
+        const {data:isAdmin,error}=await db.rpc('is_app_admin');
+        if(error||!isAdmin){await db.auth.signOut();showLogin();status($('#loginStatus'),'Este correo no tiene permiso para administrar la app.','error');return}
+        $('#loginBox').hidden=true;$('#adminApp').hidden=false;$('#messageDate').value=localDate();
+        await Promise.all([loadDevices(),loadMessages()]);
+      }
+      function showLogin(){$('#loginBox').hidden=false;$('#adminApp').hidden=true}
+
+      $('#loginForm').addEventListener('submit',async e=>{
+        e.preventDefault();clearStatus($('#loginStatus'));setBusy(true);
+        try{
+        const {error}=await db.auth.signInWithPassword({email:$('#loginEmail').value.trim(),password:$('#loginPassword').value});
+        if(error)return status($('#loginStatus'),'No se ha podido entrar. Comprueba el correo y la contraseña.','error');
+        await checkSession();
+        }catch{status($('#loginStatus'),'No se ha podido conectar. Inténtalo de nuevo.','error')}
+        finally{setBusy(false)}
+      });
+      $('#logoutBtn').onclick=async()=>{await db.auth.signOut();showLogin()};
+
+      async function loadDevices(){
+        const {data,error}=await db.from('devices').select('*').order('created_at',{ascending:false});
+        const list=$('#deviceList');list.replaceChildren();
+        if(error){list.innerHTML='<div class="empty">No se pudieron cargar los dispositivos.</div>';return}
+        const pending=data.filter(d=>!d.approved).length;$('#pendingCount').textContent=pending+' '+(pending===1?'pendiente':'pendientes');
+        if(!data.length){list.innerHTML='<div class="empty">Cuando tu madre abra la nueva versión de la app, su móvil aparecerá aquí.</div>';return}
+        data.forEach(device=>{
+          const row=document.createElement('div');row.className='item device';
+          const info=document.createElement('div');
+          const name=document.createElement('strong');name.textContent=device.device_name||'iPhone de mamá';
+          const when=document.createElement('small');when.textContent='Detectado: '+new Date(device.created_at).toLocaleString('es-ES');
+          const code=document.createElement('small');code.textContent='Código: '+device.user_id.slice(0,8).toUpperCase();
+          info.append(name,when,code);row.appendChild(info);
+          const action=document.createElement('button');action.className=device.approved?'secondary':'primary';action.textContent=device.approved?'Retirar acceso':'Autorizar';
+          action.onclick=async()=>{
+            if(!confirm(device.approved?'¿Retirar el acceso de este dispositivo?':'Comprueba con tu madre el código '+device.user_id.slice(0,8).toUpperCase()+'. ¿Coincide con su bandejita?'))return;
+            action.disabled=true;const {error}=await db.from('devices').update({approved:!device.approved,approved_at:device.approved?null:new Date().toISOString()}).eq('user_id',device.user_id);
+            if(error){action.disabled=false;alert('No se pudo cambiar el permiso.')}else await loadDevices();
+          };row.appendChild(action);
+          list.appendChild(row);
+        });
+      }
+
+      async function signedPhoto(path){if(!path)return null;const {data}=await db.storage.from('daily-photos').createSignedUrl(path,3600);return data?.signedUrl||null}
+      async function loadMessages(){
+        const {data,error}=await db.from('messages').select('*').order('message_date',{ascending:false});
+        const list=$('#messageList');list.replaceChildren();
+        if(error){list.innerHTML='<div class="empty">No se pudieron cargar los mensajes.</div>';return}
+        messages=data||[];
+        if(!messages.length){list.innerHTML='<div class="empty">Todavía no has publicado ningún mensaje.</div>';return}
+        for(const msg of messages){
+          const item=document.createElement('div');item.className='item';
+          const date=document.createElement('div');date.className='item-date';date.textContent=prettyDate(msg.message_date);
+          const body=document.createElement('div');body.className='item-text';body.textContent=msg.body;item.append(date,body);
+          if(msg.photo_path){const url=await signedPhoto(msg.photo_path);if(url){const img=document.createElement('img');img.src=url;img.alt='Fotografía del mensaje';img.loading='lazy';item.appendChild(img)}}
+          const actions=document.createElement('div');actions.className='actions';
+          const edit=document.createElement('button');edit.className='secondary';edit.textContent='Editar';edit.onclick=()=>editMessage(msg);
+          const del=document.createElement('button');del.className='danger';del.textContent='Eliminar';del.onclick=()=>deleteMessage(msg);
+          actions.append(edit,del);item.appendChild(actions);list.appendChild(item);
+        }
+      }
+
+      $('#messagePhoto').addEventListener('change',()=>{const file=$('#messagePhoto').files[0];if(!file){$('#photoPreview').classList.remove('show');return}$('#photoPreview').src=URL.createObjectURL(file);$('#photoPreview').classList.add('show')});
+      async function compressPhoto(file){
+        const url=URL.createObjectURL(file);
+        try{
+          const img=await new Promise((resolve,reject)=>{const i=new Image();i.onload=()=>resolve(i);i.onerror=reject;i.src=url});
+          const max=1600,scale=Math.min(1,max/Math.max(img.naturalWidth,img.naturalHeight));
+          const canvas=document.createElement('canvas');canvas.width=Math.round(img.naturalWidth*scale);canvas.height=Math.round(img.naturalHeight*scale);
+          canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);
+          return await new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error('No se pudo preparar la foto')),'image/jpeg',.84));
+        }finally{URL.revokeObjectURL(url)}
+      }
+      async function uploadPhoto(file){
+        const blob=await compressPhoto(file),path=new Date().getFullYear()+'/'+crypto.randomUUID()+'.jpg';
+        const {error}=await db.storage.from('daily-photos').upload(path,blob,{contentType:'image/jpeg',upsert:false});
+        if(error)throw error;return path;
+      }
+
+      $('#messageForm').addEventListener('submit',async e=>{
+        e.preventDefault();clearStatus($('#formStatus'));setBusy(true);$('#publishBtn').disabled=true;
+        let newPhotoPath=editingPhotoPath,committed=false;
+        try{
+          const file=$('#messagePhoto').files[0];if(file)newPhotoPath=await uploadPhoto(file);
+          const record={message_date:$('#messageDate').value,body:$('#messageBody').value.trim(),photo_path:newPhotoPath};
+          const result=editingId?await db.from('messages').update(record).eq('id',editingId):await db.from('messages').insert(record);
+          if(result.error)throw result.error;
+          committed=true;
+          if(file&&editingPhotoPath&&editingPhotoPath!==newPhotoPath)await db.storage.from('daily-photos').remove([editingPhotoPath]);
+          status($('#formStatus'),editingId?'Mensaje actualizado correctamente.':'Mensaje publicado correctamente.');resetForm();await loadMessages();
+        }catch(err){
+          if(!committed&&newPhotoPath&&newPhotoPath!==editingPhotoPath)await db.storage.from('daily-photos').remove([newPhotoPath]);
+          const duplicate=err.code==='23505';status($('#formStatus'),duplicate?'Ya existe un mensaje para esa fecha. Puedes editar el que aparece abajo.':'No se pudo guardar el mensaje: '+err.message,'error');
+        }finally{setBusy(false);$('#publishBtn').disabled=false}
+      });
+      function editMessage(msg){editingId=msg.id;editingPhotoPath=msg.photo_path;$('#formTitle').textContent='Editar mensaje';$('#publishBtn').textContent='Guardar cambios';$('#cancelEditBtn').hidden=false;$('#messageDate').value=msg.message_date;$('#messageBody').value=msg.body;$('#messagePhoto').value='';$('#photoPreview').classList.remove('show');window.scrollTo({top:0,behavior:'smooth'})}
+      function resetForm(){editingId=null;editingPhotoPath=null;$('#formTitle').textContent='Preparar un mensaje';$('#publishBtn').textContent='Publicar mensaje';$('#cancelEditBtn').hidden=true;$('#messageForm').reset();$('#messageDate').value=localDate();$('#photoPreview').classList.remove('show')}
+      $('#cancelEditBtn').onclick=resetForm;
+      async function deleteMessage(msg){
+        if(!confirm('¿Quieres eliminar definitivamente este mensaje?'))return;
+        setBusy(true);const {error}=await db.from('messages').delete().eq('id',msg.id);
+        if(!error&&msg.photo_path)await db.storage.from('daily-photos').remove([msg.photo_path]);
+        setBusy(false);if(error)alert('No se pudo eliminar el mensaje.');else{if(editingId===msg.id)resetForm();await loadMessages()}
+      }
+      checkSession().catch(()=>{showLogin();status($('#loginStatus'),'No se ha podido conectar. Comprueba la conexión y vuelve a abrir el panel.','error')});
+      setInterval(()=>{if(!document.hidden&&!$('#adminApp').hidden)loadDevices()},15000);
+    })();
+  </script>
+</body>
+</html>

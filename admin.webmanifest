@@ -1,0 +1,11 @@
+{
+  "id": "./admin.html",
+  "name": "Para mamá · Panel privado",
+  "short_name": "Para mamá",
+  "start_url": "./admin.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#fbf6ee",
+  "theme_color": "#fbf6ee",
+  "icons": [{"src": "icono-luz.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any"}]
+}
