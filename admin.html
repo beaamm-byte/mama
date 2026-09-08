@@ -24,6 +24,13 @@
     .item-text,.status,.device small{overflow-wrap:anywhere}
     .pill,.logout{flex-shrink:0}.pill{white-space:nowrap}
     @media(max-width:430px){.section-head{flex-wrap:wrap;align-items:flex-start}.section-head>div{flex:1 1 180px}.actions button{min-width:0;flex:1 1 140px}}
+    .message-fold{padding:0;overflow:hidden;overflow-anchor:none}
+    .message-fold summary{display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;cursor:pointer;padding:17px 16px;line-height:1.5}
+    .message-fold summary::-webkit-details-marker{display:none}
+    .message-fold summary::after{content:'＋';font-size:1.3rem;flex-shrink:0}
+    .message-fold[open] summary::after{content:'−'}
+    .message-fold[open] summary{border-bottom:1px solid #e0e5e1}
+    .message-content{padding:7px 16px 16px;min-width:0}
   </style>
 </head>
 <body>
@@ -146,14 +153,20 @@
         messages=data||[];
         if(!messages.length){list.innerHTML='<div class="empty">Todavía no has publicado ningún mensaje.</div>';return}
         for(const msg of messages){
-          const item=document.createElement('div');item.className='item';
-          const date=document.createElement('div');date.className='item-date';date.textContent=prettyDate(msg.message_date);
-          const body=document.createElement('div');body.className='item-text';body.textContent=msg.body;item.append(date,body);
-          if(msg.photo_path){const url=await signedPhoto(msg.photo_path);if(url){const img=document.createElement('img');img.src=url;img.alt='Fotografía del mensaje';img.loading='lazy';item.appendChild(img)}}
+          const item=document.createElement('details');item.className='item message-fold';
+          const date=document.createElement('summary');date.className='item-date';date.textContent=prettyDate(msg.message_date);
+          const content=document.createElement('div');content.className='message-content';
+          const body=document.createElement('div');body.className='item-text';body.textContent=msg.body;content.appendChild(body);item.append(date,content);
+          let photoLoaded=false,photoLoading=false;
+          item.addEventListener('toggle',async()=>{
+            if(!item.open||!msg.photo_path||photoLoaded||photoLoading)return;
+            photoLoading=true;
+            try{const url=await signedPhoto(msg.photo_path);if(url){const img=document.createElement('img');img.src=url;img.alt='Fotografía del mensaje';img.loading='lazy';body.after(img);photoLoaded=true}}catch{ /* Retry when reopened. */ }finally{photoLoading=false}
+          });
           const actions=document.createElement('div');actions.className='actions';
           const edit=document.createElement('button');edit.className='secondary';edit.textContent='Editar';edit.onclick=()=>editMessage(msg);
           const del=document.createElement('button');del.className='danger';del.textContent='Eliminar';del.onclick=()=>deleteMessage(msg);
-          actions.append(edit,del);item.appendChild(actions);list.appendChild(item);
+          actions.append(edit,del);content.appendChild(actions);list.appendChild(item);
         }
       }
 
