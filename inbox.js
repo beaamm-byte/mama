@@ -53,10 +53,18 @@
   async function renderInbox(){
     const hidden=hiddenSet(),visible=messages.filter(m=>!hidden.has(m.id));
     const signature=JSON.stringify(visible);if(signature===renderedSignature)return;
-    const openIds=new Set([...list.querySelectorAll('details[open]')].map(d=>d.dataset.messageId));
-    list.replaceChildren();renderedSignature=signature;
-    if(!visible.length){list.innerHTML='<div class="inbox-empty"><span>♡</span>Todavía no hay mensajes en tu bandejita.</div>';return}
-    for(const msg of visible){const card=await createMessageCard(msg);list.appendChild(card);if(openIds.has(msg.id))card.open=true}
+    const existing=new Map([...list.querySelectorAll('details')].map(d=>[d.dataset.messageId,d]));
+    if(!visible.length){list.innerHTML='<div class="inbox-empty"><span>♡</span>Todavía no hay mensajes en tu bandejita.</div>';renderedSignature=signature;return}
+    const cards=[];
+    for(const msg of visible){
+      const previous=existing.get(msg.id),version=JSON.stringify(msg);
+      if(previous&&previous.messageVersion===version){cards.push(previous);continue}
+      const card=await createMessageCard(msg);card.messageVersion=version;card.open=previous?.open||false;cards.push(card);
+    }
+    // Keep the nodes (including downloaded photos) for unchanged messages.
+    const retained=new Set(cards);[...list.children].forEach(child=>{if(!retained.has(child))child.remove()});
+    cards.forEach((card,i)=>{if(list.children[i]!==card)list.insertBefore(card,list.children[i]||null)});
+    renderedSignature=signature;
   }
   async function showTodayPopup(){
     const read=readSet(),hidden=hiddenSet(),msg=messages.find(m=>m.message_date===today()&&!read.has(m.id)&&!hidden.has(m.id));
@@ -75,7 +83,7 @@
       if(!approved){messages=[];renderedSignature=null;updateBadge();if(!popup.hidden)closeLayer(popup);activeMessage=null;list.innerHTML='<div class="inbox-empty"><span>♡</span>Tu bandejita estará lista muy pronto. Puedes seguir disfrutando de toda la app.</div>';return}
       const {data,error}=await db.from('messages').select('*').lte('message_date',today()).order('message_date',{ascending:false});
       if(error)throw error;messages=data||[];updateBadge();await renderInbox();await showTodayPopup();
-    }catch(err){renderedSignature=null;list.innerHTML='<div class="inbox-empty">No se ha podido conectar. Puedes seguir usando la app y volver a tocar el sobre para intentarlo de nuevo.</div>'}
+    }catch(err){if(!list.querySelector('.letter')){renderedSignature=null;list.innerHTML='<div class="inbox-empty">No se ha podido conectar. Puedes seguir usando la app y volver a tocar el sobre para intentarlo de nuevo.</div>'}}
     finally{loading=false}
   }
 
